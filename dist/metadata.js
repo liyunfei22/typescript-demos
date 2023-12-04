@@ -8,12 +8,79 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-// @emitDecoratorMetadata
-// @experimentalDecorators
-// @strictPropertyInitialization: false
-require("reflect-metadata");
-class Point {
+const requiredMetadataKey = Symbol("required");
+function required(target, propertyKey, parameterIndex) {
+    let existingRequiredParameters = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) || [];
+    existingRequiredParameters.push(parameterIndex);
+    Reflect.defineMetadata(requiredMetadataKey, existingRequiredParameters, target, propertyKey);
+}
+class BugReport {
+    constructor(t) {
+        this.type = "report";
+        this.title = t;
+    }
+    print(verbose) {
+        if (verbose) {
+            return `type: ${this.type}\ntitle: ${this.title}`;
+        }
+        else {
+            return this.title;
+        }
+    }
+}
+function add(target) {
+    console.log(target);
+}
+let Person = class Person {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    getName(x) {
+        return x;
+    }
+};
+Person = __decorate([
+    add,
+    __metadata("design:paramtypes", [String, Number])
+], Person);
+function showMeta(target, propertyKey, decorator) {
+}
+let Test = class Test {
+    constructor(p, q) {
+        this.p = p;
+    }
+    /**
+     * add
+     */
+    add(x, y) {
+        return x + y;
+    }
+    des(x, y) {
+        return x - y;
+    }
+};
+__decorate([
+    showMeta,
+    __metadata("design:type", String)
+], Test.prototype, "name", void 0);
+__decorate([
+    showMeta,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:returntype", Number)
+], Test.prototype, "add", null);
+__decorate([
+    showMeta,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:returntype", Number)
+], Test.prototype, "des", null);
+Test = __decorate([
+    add,
+    __metadata("design:paramtypes", [Object, String])
+], Test);
+class Point44 {
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -55,61 +122,3 @@ function validate(target, propertyKey, descriptor) {
 }
 const line = new Line();
 line.start = new Point(0, 0);
-// @ts-ignore
-// line.end = {}
-// Fails at runtime with:
-// > Invalid type, got object not Point
-const myObject = {
-    foo: 1,
-    bar: 2,
-    get baz() {
-        return this.foo + this.bar;
-    }
-};
-const myReceiverObject = {
-    foo: 4,
-    bar: 4
-};
-const foo = Reflect.get(myObject, 'foo');
-const baz = Reflect.get(myObject, 'baz', myReceiverObject);
-console.log(foo, baz);
-const car = {
-    brand: 'bwm',
-    price: 10
-};
-Reflect.defineMetadata('desc', 'this is good car', car);
-Reflect.defineMetadata('desc2', 'this is good car two', car);
-Reflect.defineMetadata('desc', 'cheap', car, 'price');
-console.log(Reflect.hasMetadata('desc', car));
-console.log(Reflect.hasOwnMetadata('desc', car));
-console.log(Reflect.hasMetadata('desc', car, 'price'));
-console.log(Reflect.getMetadata('desc', car));
-console.log(Reflect.getOwnMetadata('desc', car));
-console.log(Reflect.getMetadata('desc', car, 'price'));
-console.log(Reflect.getMetadataKeys(car));
-console.log(Reflect.getOwnMetadataKeys(car));
-console.log(Reflect.getMetadataKeys(car, 'price'));
-let C = class C {
-    method(a, b) {
-        return a + b;
-    }
-};
-__decorate([
-    Reflect.metadata('bar', 2),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number]),
-    __metadata("design:returntype", Number)
-], C.prototype, "method", null);
-C = __decorate([
-    Reflect.metadata('foo', 1)
-], C);
-const c = new C();
-console.log(Reflect.getMetadata('foo', C));
-console.log('-------');
-console.log(Reflect.getMetadataKeys(C));
-console.log(Reflect.getMetadataKeys(C.prototype, 'method'));
-console.log(Reflect.getMetadata('bar', C.prototype, 'method'));
-console.log(Reflect.getMetadata('design:returntype', C.prototype, 'method'));
-console.log(Reflect.getMetadata('design:paramtypes', C.prototype, 'method'));
-console.log(Reflect.getMetadata('design:type', C.prototype, 'method'));
-console.log(c);
