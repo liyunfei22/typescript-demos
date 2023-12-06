@@ -44,13 +44,13 @@ interface Person2 {
   name: string;
   age: number;
 }
-function showMeta(target, propertyKey, decorator) {
+function showMeta(target, propertyKey) {
 
 }
 @add
 class Test {
   @showMeta
-  private name: string;
+  private name: string = 's';
 
   constructor(private p: Person2, q: string) {
     
@@ -74,42 +74,42 @@ class Point44 {
   constructor(public x: number, public y: number) {}
 }
  
-class Line {
-  private _start: Point;
-  private _end: Point;
+// class Line {
+//   private _start: Point;
+//   private _end: Point;
  
-  @validate
-  set start(value: Point) {
-    this._start = value;
-  }
+//   @validate
+//   set start(value: Point) {
+//     this._start = value;
+//   }
  
-  get start() {
-    return this._start;
-  }
+//   get start() {
+//     return this._start;
+//   }
  
-  @validate
-  set end(value: Point) {
-    this._end = value;
-  }
+//   @validate
+//   set end(value: Point) {
+//     this._end = value;
+//   }
  
-  get end() {
-    return this._end;
-  }
-}
+//   get end() {
+//     return this._end;
+//   }
+// }
  
-function validate<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) {
-  let set = descriptor.set!;
+// function validate<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) {
+//   let set = descriptor.set!;
   
-  descriptor.set = function (value: T) {
-    let type = Reflect.getMetadata("design:type", target, propertyKey);
+//   descriptor.set = function (value: T) {
+//     let type = Reflect.getMetadata("design:type", target, propertyKey);
  
-    if (!(value instanceof type)) {
-      throw new TypeError(`Invalid type, got ${typeof value} not ${type.name}.`);
-    }
+//     if (!(value instanceof type)) {
+//       throw new TypeError(`Invalid type, got ${typeof value} not ${type.name}.`);
+//     }
  
-    set.call(this, value);
-  };
-}
+//     set.call(this, value);
+//   };
+// }
  
-const line = new Line()
-line.start = new Point(0, 0)
+// const line = new Line()
+// line.start = new Point(0)

@@ -44,11 +44,12 @@ Person = __decorate([
     add,
     __metadata("design:paramtypes", [String, Number])
 ], Person);
-function showMeta(target, propertyKey, decorator) {
+function showMeta(target, propertyKey) {
 }
 let Test = class Test {
     constructor(p, q) {
         this.p = p;
+        this.name = 's';
     }
     /**
      * add
@@ -86,39 +87,33 @@ class Point44 {
         this.y = y;
     }
 }
-class Line {
-    set start(value) {
-        this._start = value;
-    }
-    get start() {
-        return this._start;
-    }
-    set end(value) {
-        this._end = value;
-    }
-    get end() {
-        return this._end;
-    }
-}
-__decorate([
-    validate,
-    __metadata("design:type", Point),
-    __metadata("design:paramtypes", [Point])
-], Line.prototype, "start", null);
-__decorate([
-    validate,
-    __metadata("design:type", Point),
-    __metadata("design:paramtypes", [Point])
-], Line.prototype, "end", null);
-function validate(target, propertyKey, descriptor) {
-    let set = descriptor.set;
-    descriptor.set = function (value) {
-        let type = Reflect.getMetadata("design:type", target, propertyKey);
-        if (!(value instanceof type)) {
-            throw new TypeError(`Invalid type, got ${typeof value} not ${type.name}.`);
-        }
-        set.call(this, value);
-    };
-}
-const line = new Line();
-line.start = new Point(0, 0);
+// class Line {
+//   private _start: Point;
+//   private _end: Point;
+//   @validate
+//   set start(value: Point) {
+//     this._start = value;
+//   }
+//   get start() {
+//     return this._start;
+//   }
+//   @validate
+//   set end(value: Point) {
+//     this._end = value;
+//   }
+//   get end() {
+//     return this._end;
+//   }
+// }
+// function validate<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) {
+//   let set = descriptor.set!;
+//   descriptor.set = function (value: T) {
+//     let type = Reflect.getMetadata("design:type", target, propertyKey);
+//     if (!(value instanceof type)) {
+//       throw new TypeError(`Invalid type, got ${typeof value} not ${type.name}.`);
+//     }
+//     set.call(this, value);
+//   };
+// }
+// const line = new Line()
+// line.start = new Point(0)
